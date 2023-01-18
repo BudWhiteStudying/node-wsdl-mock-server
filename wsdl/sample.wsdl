@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions
+   name="MyJavaClass1WS"
+   targetNamespace="http://mypackage/JavaClass1.wsdl"
+   xmlns="http://schemas.xmlsoap.org/wsdl/"
+   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+   xmlns:tns="http://mypackage/JavaClass1.wsdl"
+   xmlns:ns1="http://mypackage/IMyJavaClass1WS.xsd">
+   <types>
+      <schema
+         targetNamespace="http://mypackage/IMyJavaClass1WS.xsd"
+         xmlns="http://www.w3.org/2001/XMLSchema"
+         xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </types>
+   <message name="getDate0Request"/>
+   <message name="getDate0Response">
+      <part name="return" type="xsd:string"/>
+   </message>
+   <portType name="JavaClass1PortType">
+      <operation name="getDate">
+         <input name="getDate0Request" message="tns:getDate0Request"/>
+         <output name="getDate0Response" message="tns:getDate0Response"/>
+      </operation>
+   </portType>
+   <binding name="JavaClass1Binding" type="tns:JavaClass1PortType">
+      <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+      <operation name="getDate">
+         <soap:operation soapAction="" style="rpc"/>
+         <input name="getDate0Request">
+            <soap:body use="encoded" namespace="MyJavaClass1WS" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+         </input>
+         <output name="getDate0Response">
+            <soap:body use="encoded" namespace="MyJavaClass1WS" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+         </output>
+      </operation>
+   </binding>
+   <service name="MyJavaClass1WS">
+      <port name="JavaClass1Port" binding="tns:JavaClass1Binding">
+         <soap:address location="http://UKP16211:8888/Application1-Project-context-root/MyJavaClass1WS"/>
+      </port>
+   </service>
+</definitions>
