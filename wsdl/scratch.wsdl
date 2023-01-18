@@ -12,6 +12,9 @@
 
     <!-- only one - could contain multiple rerefences to multiple XSDs though -->
     <!-- defines the data types employed by the service -->
+    <!-- contains a <schema> element, which in turn contains -->
+    <!-- references to XSD files, simpleType elements complexType elements -->
+    <!-- or even just "element" elements -->
     <types></types>
 
     <!-- one or more -->
@@ -19,7 +22,7 @@
     <!-- exposed by the service -->
     <message></message>
 
-    <!-- one or more -->
+    <!-- one (or more?!) -->
     <!-- defines the interface of the operations exposed by the service -->
     <!-- i.e. for each operation, it defines the input and the output -->
     <portType>
@@ -37,7 +40,7 @@
         <operation></operation>
     </binding>
 
-    <!-- one or more?! -->
+    <!-- one (or more?!) -->
     <!-- for each port type defined above -->
     <!-- it defines a concrete port element -->
     <!-- each port element is linked to a binding defined above -->

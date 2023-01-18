@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions
+    name=""
+    targetNamespace="http://package.of.this.service/ExampleService.wsdl"
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+
+    xmlns:tns="http://package.of.this.service/ExampleService.wsdl"
+    xmlns:ns1="http://my.type.namespace/data"
+    >
+
+    <!-- only one - could contain multiple rerefences to multiple XSDs though -->
+    <!-- defines the data types employed by the service -->
+    <!-- contains a <schema> element, which in turn contains -->
+    <!-- references to XSD files, simpleType elements complexType elements -->
+    <!-- or even just "element" elements -->
+    <types>
+        <schema attributeFormDefault="qualified" targetNamespace="http://my.type.namespace/data" xmlns="http://www.w3.org/2001/XMLSchema">
+            <complexType name="SomeRequest">
+                <all>
+                    <element name="foo" type="string"/>
+                    <element name="baz" type="string"/>
+                    <element name="bar" type="string"/>
+                </all>
+            </complexType>
+            <complexType name="SomeOtherRequest">
+                <all>
+                    <element name="fix" type="string"/>
+                    <element name="bix" type="string"/>
+                    <element name="bax" type="string"/>
+                </all>
+            </complexType>
+            <complexType name="SomeResponse">
+                <all>
+                    <element name="message" type="string"/>
+                    <element name="statusCode" type="int"/>
+                </all>
+            </complexType>
+            <element name="SomeRequestElement" type="ns1:SomeRequest"/>
+            <element name="SomeOtherRequestElement" type="ns1:SomeOtherRequest"/>
+            <element name="SomeResponseElement" type="ns1:SomeResponse"/>
+        </schema>
+    </types>
+
+    <!-- one or more -->
+    <!-- defines the messages used as input and output by the operations -->
+    <!-- exposed by the service -->
+    <message name="SomeRequestMessage">
+        <part name="data" element="ns1:SomeRequestElement"/>
+    </message>
+    <message name="SomeOtherRequestMessage">
+        <part name="data" element="ns1:SomeOtherRequestElement"/>
+    </message>
+    <message name="SomeResponseMessage">
+        <part name="data" element="ns1:SomeResponseElement"/>
+    </message>
+
+    <!-- one (or more ?!) -->
+    <!-- defines the interface of the operations exposed by the service -->
+    <!-- i.e. for each operation, it defines the input and the output -->
+    <portType name="ExampleServicePortType">
+        <!-- one or more -->
+        <operation name="doSomething">
+            <input message="tns:SomeRequestMessage"/>
+            <output message="tns:SomeResponseMessage"/>
+        </operation>
+        <operation name="doSomethingElse">
+            <input message="tns:SomeOtherRequestMessage"/>
+            <output message="tns:SomeResponseMessage"/>
+        </operation>
+    </portType>
+
+    <!-- one or more -->
+    <!-- binds each operation defined in the portTypes to an ACTION -->
+    <!-- also specifies the behaviour of each operation -->
+    <!-- i.e. does it accept an input, does it return an output -->
+    <binding name="ExampleServiceBindingOne" type="tns:ExampleServicePortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+        <!-- one or more -->
+        <operation name="doSomethingElse">
+            <soap:operation soapAction="doSomethingElse"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="doSomething">
+            <soap:operation soapAction="doSomething"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <binding name="ExampleServiceBindingTwo" type="tns:ExampleServicePortType">
+        <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+        <!-- one or more -->
+        <operation name="doSomethingElse">
+            <soap12:operation soapAction="doSomethingElse"/>
+            <input>
+                <soap12:body use="literal"/>
+            </input>
+            <output>
+                <soap12:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="doSomething">
+            <soap12:operation soapAction="doSomething"/>
+            <input>
+                <soap12:body use="literal"/>
+            </input>
+            <output>
+                <soap12:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+
+    <!-- one (or more?!) -->
+    <!-- for each port type defined above -->
+    <!-- it defines a concrete port element -->
+    <!-- each port element is linked to a binding defined above -->
+    <!-- each port element also defines a location i.e. at which address is the port exposed -->
+    <service name="ExampleService">
+        <!-- one or more -->
+        <port name="ExampleServiceSoap11Port" binding="ExampleServiceBindingOne">
+            <soap:address location="http://localhost:8081/some/path/ExampleService"/>
+        </port>
+        <port name="ExampleServiceSoap12Port" binding="ExampleServiceBindingTwo">
+            <soap12:address location="http://localhost:8081/some/path/ExampleService"/>
+        </port>
+    </service>
+</definitions>
