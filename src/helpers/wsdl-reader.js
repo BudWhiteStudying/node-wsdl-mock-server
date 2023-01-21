@@ -52,18 +52,18 @@ const locateElementWithinParent = (parent, elementName) => {
 };
 
 const getMatchingComplexTypeByName = (typeName) => {
-    return WSDL_DOCUMENT.complexTypes
+    return WSDL_DOCUMENT.complexTypesInSchema
         .find(ct => utility.stripNamespaceFromString(ct.name) === utility.stripNamespaceFromString(typeName))
 }
 
-const getMatchingTypeElementByName = (typeName) => {
-    return WSDL_DOCUMENT.typeElements
-        .find(te => utility.stripNamespaceFromString(te.name) === utility.stripNamespaceFromString(typeName))
+const getMatchingSimpleTypeByName = (typeName) => {
+    return WSDL_DOCUMENT.simpleTypesInSchema
+        .find(ct => utility.stripNamespaceFromString(ct.name) === utility.stripNamespaceFromString(typeName))
 }
 
 const getMatchingTypeByName = (typeName) => {
     const matchingComplexType = getMatchingComplexTypeByName(typeName)
-    return matchingComplexType || getMatchingTypeElementByName(typeName)
+    return matchingComplexType || getMatchingSimpleTypeByName(typeName)
 }
 
 
@@ -75,18 +75,19 @@ const readWsdlDocument = async (documentPath) => {
     //fs.writeFileSync('service.json', JSON.stringify(WSDL_DOCUMENT.json, null, 4));
     WSDL_DOCUMENT.namespaces = locateNamespaces(WSDL_DOCUMENT.json)
     WSDL_DOCUMENT.service = locateTopLevelElement(WSDL_DOCUMENT.json, "service")
-    let bindings = locateTopLevelElement(WSDL_DOCUMENT.json, "binding")
+    const bindings = locateTopLevelElement(WSDL_DOCUMENT.json, "binding")
     WSDL_DOCUMENT.bindings = Array.isArray(bindings) ? bindings : [bindings]
     WSDL_DOCUMENT.portTypes = locateTopLevelElement(WSDL_DOCUMENT.json, "portType")
-    let messages = locateTopLevelElement(WSDL_DOCUMENT.json, "message")
+    const messages = locateTopLevelElement(WSDL_DOCUMENT.json, "message")
     WSDL_DOCUMENT.messages = Array.isArray(messages) ? messages : [messages]
 
-    let ports = locateElementWithinParent(WSDL_DOCUMENT.service, "port")
-    WSDL_DOCUMENT.ports = Array.isArray(ports) ? ports : [ports]
-    WSDL_DOCUMENT.location = locateElementWithinParent(Array.isArray(WSDL_DOCUMENT.ports) ? WSDL_DOCUMENT.ports[0] : WSDL_DOCUMENT.ports, "address").location.replace(/(https?:\/\/(.*?)\/)(.*)/,'/$3')
+    const servicePorts = locateElementWithinParent(WSDL_DOCUMENT.service, "port")
+    WSDL_DOCUMENT.servicePorts = Array.isArray(servicePorts) ? servicePorts : [servicePorts]
+    WSDL_DOCUMENT.location = locateElementWithinParent(Array.isArray(WSDL_DOCUMENT.servicePorts) ? WSDL_DOCUMENT.servicePorts[0] : WSDL_DOCUMENT.servicePorts, "address").location.replace(/(https?:\/\/(.*?)\/)(.*)/,'/$3')
     WSDL_DOCUMENT.schema = locateElementWithinParent(locateTopLevelElement(WSDL_DOCUMENT.json, "types"), "schema")
-    WSDL_DOCUMENT.typeElements = locateElementWithinParent(WSDL_DOCUMENT.schema, "element") || []
-    WSDL_DOCUMENT.complexTypes = locateElementWithinParent(WSDL_DOCUMENT.schema, "complexType") || []
+    WSDL_DOCUMENT.elementsInSchema = locateElementWithinParent(WSDL_DOCUMENT.schema, "element") || []
+    WSDL_DOCUMENT.complexTypesInSchema = locateElementWithinParent(WSDL_DOCUMENT.schema, "complexType") || []
+    WSDL_DOCUMENT.simpleTypesInSchema = locateElementWithinParent(WSDL_DOCUMENT.schema, "simpleType") || []
 
     Object.freeze(WSDL_DOCUMENT)
     return WSDL_DOCUMENT
@@ -94,6 +95,7 @@ const readWsdlDocument = async (documentPath) => {
 
 module.exports = {
     locateElementWithinParent : locateElementWithinParent,
-    getMatchingTypeByName : getMatchingTypeByName,
+    getMatchingSimpleTypeByName : getMatchingSimpleTypeByName,
+    getMatchingComplexTypeByName : getMatchingComplexTypeByName,
     readWsdlDocument : readWsdlDocument
 }

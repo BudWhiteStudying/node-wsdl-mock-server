@@ -7,7 +7,7 @@ const readAppEnv = (wsdlPathFromCl) => {
         throw "Illegal value for process.env.AVG_RESPONSE_TIME_MS (must be between 0 and 1)"
     }
     APP_ENV.serverPort = process.env.SERVER_PORT || 8001
-    APP_ENV.wsdlFilepath = wsdlPathFromCl || process.env.WSDL_FILEPATH || 'wsdl/sample.wsdl'
+    APP_ENV.wsdlFilepath = wsdlPathFromCl || process.env.WSDL_FILEPATH || 'wsdl/example.wsdl'
     APP_ENV.messageSizeLimit = process.env.MESSAGE_SIZE_LIMIT || '5mb'
     Object.freeze(APP_ENV)
     console.log(`Script initialized, dumping ENV:\n${JSON.stringify(APP_ENV, null, 4)}`)

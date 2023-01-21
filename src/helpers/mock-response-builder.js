@@ -23,7 +23,7 @@ const generateMockValueIfPrimitiveType = (typeName) => {
     }
 }
 
-const processType = (elementName, typeName, recursionRank) => {
+const processType = (typeName, recursionRank) => {
     const strippedType = utility.stripNamespaceFromString(typeName)
     if(generateMockValueIfPrimitiveType(strippedType)!==undefined) {
         //console.log(`${utility.buildIndentation(recursionRank)}The '${elementName}' property is of type '${strippedType}' and will be assigned a mock value of '${generateMockValueIfPrimitiveType(strippedType)}'`)
@@ -31,7 +31,7 @@ const processType = (elementName, typeName, recursionRank) => {
     }
     else {
         //console.log(`${utility.buildIndentation(recursionRank)}The '${elementName}' property is of type '${strippedType}', which we will need to dig up and process`)
-        return processComplexType(wsdlReader.getMatchingTypeByName(strippedType), recursionRank+1)
+        return processComplexType(wsdlReader.getMatchingComplexTypeByName(strippedType), recursionRank+1)
     }
 }
 
@@ -48,18 +48,18 @@ const processComplexType = (complexType, recursionRank) => {
         return buildMockupReturnObject(maybeSequence, recursionRank+1)
     }
     else {
-        //console.log(`${utility.buildIndentation(recursionRank)}I messed up when looking into the complex type`)
+        console.warn(`\n${utility.buildIndentation(recursionRank)}I messed up when looking into the complex type:\n${JSON.stringify(complexType, null, 4)}`)
     }
 }
 
-const processSimpleType = (elementName, simpleType, recursionRank) => {
+const processSimpleType = (simpleType, recursionRank) => {
     const restriction = wsdlReader.locateElementWithinParent(simpleType, "restriction")
     if(restriction) {
         //console.log(`${utility.buildIndentation(recursionRank)}The '${elementName}' property is of simple type with base type: ${restriction.base}`)
-        return processType(elementName, restriction.base, recursionRank+1)
+        return processType(restriction.base, recursionRank+1)
     }
     else {
-        //console.log(`${utility.buildIndentation(recursionRank)}I messed up when looking into the simple type`)
+        console.warn(`${utility.buildIndentation(recursionRank)}I messed up when looking into the simple type`)
     }
 }
 
@@ -68,13 +68,13 @@ const processTypeElement = (element, recursionRank) => {
     const maybeComplexType = wsdlReader.locateElementWithinParent(element, "complexType");
     const maybeSimpleType = wsdlReader.locateElementWithinParent(element, "simpleType");
     if(maybeType) {
-        return processType(element.name, maybeType, recursionRank)
+        return processType(maybeType, recursionRank)
     }
     else if(maybeComplexType) {
         return processComplexType(maybeComplexType, recursionRank)
     }
     else if(maybeSimpleType) {
-        return processSimpleType(element.name, maybeSimpleType, recursionRank)
+        return processSimpleType(maybeSimpleType, recursionRank)
     }
     else {
         //console.log(`${utility.buildIndentation(recursionRank)}I messed up when looking into the type`)
@@ -101,5 +101,7 @@ const buildMockupReturnObject = (complexTypeElement, recursionRank) => {
 
 module.exports = {
     buildMockupReturnObject : buildMockupReturnObject,
-    processComplexType : processComplexType
+    processComplexType : processComplexType,
+    processSimpleType : processSimpleType,
+    generateMockValueIfPrimitiveType : generateMockValueIfPrimitiveType
 }
