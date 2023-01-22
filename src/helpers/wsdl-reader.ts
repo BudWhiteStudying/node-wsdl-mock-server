@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs'
 import { toJson } from 'xml2json'
 import { stripNamespaceFromString } from './utility.js'
-import { WsdlDocument } from '../model/wsdlDocument.js'
+import { WsdlDocument } from '../model/wsdl-document.js'
 
 const locateNamespaces = (wsdlJsonRepresentation : any) => {
     const rootLevelProperty = Object.keys(wsdlJsonRepresentation)[0]
