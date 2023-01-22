@@ -40,6 +40,6 @@ const app = express()
 app.use(bodyParser.raw({ type: function () { return true }, limit: APP_ENV.messageSizeLimit }))
 app.listen(APP_ENV.serverPort, function () {
     soap.listen(app, WSDL_DOCUMENT.location, dynamicService, WSDL_DOCUMENT.xml, function () {
-        console.log(`Serving ${Object.keys(dynamicService)[0]} from location ${WSDL_DOCUMENT.location}`)
+        console.log(`Serving ${Object.keys(dynamicService)[0]} from location ${WSDL_DOCUMENT.location} on port ${APP_ENV.serverPort}`)
     })
 })
