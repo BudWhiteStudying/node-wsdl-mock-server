@@ -1,0 +1,1 @@
+export const XSD_PRIMITIVE_TYPES = ['int', 'long', 'double', 'string', 'date', 'dateTime', 'anyType']

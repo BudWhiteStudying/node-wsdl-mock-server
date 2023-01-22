@@ -1,6 +1,11 @@
 .idea
 .DS_Store
 node_modules
+
+build
+backup
+
+
 wsdl/*.wsdl
 !wsdl
 !wsdl/example.wsdl
