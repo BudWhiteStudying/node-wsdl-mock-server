@@ -13,7 +13,7 @@ const processNonPrimitiveType = (element : any, recursionRank : number) => {
         return processSimpleType(element["simpleType"], recursionRank+1)
     }
     else {
-        console.debug(`The element does not contain its own complexType or simpleType, need to look for a match within simpleTypes or complexTypes for its name ${element.type}`)
+        //console.debug(`The element does not contain its own complexType or simpleType, need to look for a match within simpleTypes or complexTypes for its name ${element.type}`)
         const maybeMatchingComplexType = global.WSDL_DOCUMENT.complexTypesInSchema
             .find((ct : any) => stripNamespaceFromString(ct.name) === stripNamespaceFromString(element.type));
         const maybeMatchingSimpleType = global.WSDL_DOCUMENT.simpleTypesInSchema
