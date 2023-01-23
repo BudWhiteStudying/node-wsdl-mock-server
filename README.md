@@ -41,7 +41,7 @@ which is configured as a volume to the `$HOME/vwsdl` path). **It is crucial that
 within the path of the volume. In the example below, such consistency is granted through the use of a variable.
 
 ```bash
-WSDL_DIR=:$HOME/vwsdl
+WSDL_DIR=$HOME/vwsdl
 
 docker run --rm -it --name soap-mock --network=host \
 -v ~/my/local/dir/wsdl:$WSDL_DIR \
