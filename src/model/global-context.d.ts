@@ -1,5 +1,5 @@
-import { AppEnvironment } from "./env.js";
-import { WsdlDocument } from "./wsdlDocument.js";
+import { AppEnvironment } from "./app-environment.js";
+import { WsdlDocument } from "./wsdl-document.js";
 
 export interface global {}
 declare global {

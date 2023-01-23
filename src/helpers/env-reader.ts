@@ -1,4 +1,4 @@
-import { AppEnvironment } from '../model/env.js'
+import { AppEnvironment } from '../model/app-environment.js'
 
 const DEFAULT_APP_ENV : AppEnvironment = {
     averageResponseTime: 1000,

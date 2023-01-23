@@ -1,8 +1,16 @@
 FROM node
 
+ARG server_port=8082
+ENV SERVER_PORT=$server_port
+
+WORKDIR $HOME/app
+
 COPY . .
-RUN npm install
+RUN npm ci
 
-EXPOSE 8081
+ENV NODE_ENV=production
+RUN npm run tsc
 
-CMD ["node", "index.js"]
+EXPOSE $server_port
+
+CMD ["node", "build/index.js"]
