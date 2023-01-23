@@ -5,11 +5,11 @@ import { XSD_PRIMITIVE_TYPES } from './constants.js'
 
 const processNonPrimitiveType = (element : any, recursionRank : number) => {
     if (element["complexType"]) {
-        console.debug(`The element contains its own complexType`)
+        //console.debug(`The element contains its own complexType`)
         return processComplexType(element["complexType"], recursionRank+1)
     }
     else if(element["simpleType"]) {
-        console.debug(`The element contains its own simpleType`)
+        //console.debug(`The element contains its own simpleType`)
         return processSimpleType(element["simpleType"], recursionRank+1)
     }
     else {
